@@ -49,19 +49,21 @@ void displayArray (int array[], int size)
 
 int main ()
 {
-    int array[ 10 ];
     srand( time( NULL ) );
-    for ( int i = 0; i < 10; i++ )
+    int array_size = rand() % 15;
+    cout << array_size << endl;
+    int array[ array_size ];
+    for ( int i = 0; i < array_size; i++ )
     {
         array[ i ] = rand() % 100;
     }
     cout << "Original array: ";
-    displayArray( array, 10 );
+    displayArray( array, array_size );
     cout << endl;
 
-    sort( array, 10 );
+    sort( array, array_size );
 
     cout << "Sorted array: ";
-    displayArray( array, 10 );
+    displayArray( array, array_size );
     cout << endl;
 }
