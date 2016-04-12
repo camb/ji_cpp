@@ -4,19 +4,28 @@
 
 using namespace std;
 
-const int board_size = 4;
+// const int max_size = 4;
 enum ticTacToeTile { BLANK, X, O };
-ticTacToeTile board[board_size][board_size];
 
-void displayBoard(ticTacToeTile board[][board_size], int size);
-bool gameOver();
-bool boardFull();
+const int max_size = 7, min_size = 4;
+void displayBoard(ticTacToeTile board[][max_size], int size);
+bool gameOver(ticTacToeTile board[][max_size], int size);
+bool boardFull(ticTacToeTile board[][max_size], int size);
 
 int main ()
 {
-    for (int i = 0; i < board_size; i++)
+    int dimension;
+    cout << "How big do you want the board? (between 4-7 tiles)\n";
+    cin >> dimension;
+    if (dimension < min_size || dimension > max_size)
     {
-        for (int j = 0; j < board_size; j++)
+        cout << "That won't work! The board must be between min_size and 7 tiles!\n";
+        return 0;
+    }
+    ticTacToeTile board[max_size][max_size];
+    for (int i = 0; i < max_size; i++)
+    {
+        for (int j = 0; j < max_size; j++)
         {
             board[i][j] = BLANK;
         }
@@ -26,10 +35,10 @@ int main ()
 
     do
     {
-    displayBoard(board, board_size);
+    displayBoard(board, dimension);
     cout << "Player " << current_player + 1 << ", where will you go?\n";
-    cin >> input2;
     cin >> input1;
+    cin >> input2;
     if (current_player == 0 && board[input1 - 1][input2 - 1] == BLANK)
     {
         board[input1 - 1][input2 - 1] = X;
@@ -42,11 +51,11 @@ int main ()
     }
     else
         cout << "That tile is already taken!\n";
-    } while ( !gameOver() && !boardFull() );
+    } while ( !gameOver(board, dimension) && !boardFull(board, dimension) );
     
-    displayBoard(board, board_size);
+    displayBoard(board, dimension);
 
-    if (gameOver())
+    if (gameOver(board, dimension))
     {
         cout << "Congrats!! Player ";
         switch (current_player)
@@ -60,18 +69,18 @@ int main ()
         }
         cout << " has won!\n";
     }
-    else if (boardFull())
+    else if (boardFull(board, dimension))
     {
         cout << "The board has been completely filled! Game over!\n";
     }
     return 0;
 }
 
-bool boardFull()
+bool boardFull(ticTacToeTile board[][max_size], int size)
 {
-    for (int i = 0; i < board_size; i++)
+    for (int i = 0; i < size; i++)
     {
-        for (int j = 0; j < board_size; j++)
+        for (int j = 0; j < size; j++)
         {
             if (board[i][j] == BLANK)
                 return false;
@@ -80,7 +89,7 @@ bool boardFull()
     return true;    
 }
 
-void displayBoard(ticTacToeTile board[][board_size], int size)
+void displayBoard(ticTacToeTile board[][max_size], int size)
 {
     for (int i = 0; i < size; i++)
     {
@@ -89,34 +98,66 @@ void displayBoard(ticTacToeTile board[][board_size], int size)
             switch (board[i][j])
             {
                 case BLANK:
-                    cout << "[ - ]";
+                    cout << "[-]";
                     break;
                 case X:
-                    cout << "[ X ]";
+                    cout << "[X]";
                     break;
                 case O:
-                    cout << "[ O ]";
+                    cout << "[O]";
                     break;
             }
-            cout << " ";
         }
         cout << endl;
     }
 }
 
-bool gameOver()
+bool gameOver(ticTacToeTile board[][max_size], int size)
 {
-    for (int i = 0; i < board_size; i++)
+    for (int i = 0; i < size; i++)
     {
-        if (board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == board[i][3] && board[i][0] != BLANK )
-            return true;
-        else if (board[0][i] == board[1][i] && board[0][i] == board[2][i] && board[0][i] == board[3][i] && board[0][i] != BLANK )
-            return true;
-    }
-    if (board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] == board[3][3] && board[0][0] != BLANK )
-        return true;
-    else if (board[0][3] == board[1][2] && board[0][3] == board[2][1] && board[0][3] == board[3][0] && board[0][3] != BLANK )
-        return true;
+        for (int j = 0; j <= ( size - 4 ) ; j++)
+        {
+            // horizontal matches
+            if (board[i][j] == board[i][j + 1] &&
+                board[i][j] == board[i][j + 2] &&
+                board[i][j] == board[i][j + 3] &&
+                board[i][j] != BLANK )
+            {
+                cout << "Horizonal 4 in a row!\n";
+                return true;
+            }
+            // // vertical matches
+            else if (board[j][i] == board[j + 1][i] &&
+                     board[j][i] == board[j + 2][i] &&
+                     board[j][i] == board[j + 3][i] &&
+                     board[j][i] != BLANK )
+            {
+                cout << "Vertical 4 in a row!\n";
+                return true;
+            }
+            // // diagonal upper left to lower right
+            else if (i < 4 &&
+                     board[i][j] == board[i + 1][j + 1] &&
+                     board[i][j] == board[i + 2][j + 2] &&
+                     board[i][j] == board[i + 3][j + 3] &&
+                     board[i][j] != BLANK )
+            {
+                cout << "Diagonal upper left to lower right!\n";
+                return true;
+            }
+            // // diagonal lower left to upper right
+            else if (i > 2 &&
+                     board[i][j] == board[i - 1][j + 1] &&
+                     board[i][j] == board[i - 2][j + 2] &&
+                     board[i][j] == board[i - 3][j + 3] &&
+                     board[i][j] != BLANK )
+            {
+                cout << "Diagonal lower left to upper right!\n";
+                return true;
+            }
+            }
+        }
 
     return false;
 }
