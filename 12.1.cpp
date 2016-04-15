@@ -19,6 +19,7 @@ int main ()
 
 void getName(string *p_fn, string *p_ln)
 {
+    cout << "Current values: " << *p_fn << " " << *p_ln << endl;
     cout << "Enter your first name: ";
     getline(cin, *p_fn, '\n');
     cout << "Enter your last name: ";
