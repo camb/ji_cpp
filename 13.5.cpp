@@ -14,6 +14,7 @@ int main ()
 void displayStackAddresses()
 {
 	int int1, int2;
+
 	if ( &int1 > &int2 )
 		cout << "int1: " << &int1 << '\t' << "int2:" << &int2 << endl;
 	else if ( &int2 > &int1 )
