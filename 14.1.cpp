@@ -46,5 +46,10 @@ int main ()
         cout << endl;
     }
 
+    for ( int i = 0; i < t_height; i++)
+    {
+        delete p_p_multtable[i];
+    }
+    delete [] p_p_multtable;
     return 0;
 }
