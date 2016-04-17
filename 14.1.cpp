@@ -10,8 +10,8 @@ int main ()
 {
     srand( time( NULL ) );
     int t_height = rand() % 8 + 5;
-    int t_length = rand() % 8 + 5;
-    int padding = (t_length * 6 - 21) / 2;
+    int t_width = rand() % 8 + 5;
+    int padding = (t_width * 6 - 21) / 2;
     for (int i = 0; i < padding; i++)
         cout << "_";
     cout << "Multiplication table";
@@ -23,12 +23,12 @@ int main ()
     p_p_multtable = new int*[t_height];
     for ( int i = 0; i < t_height; i++)
     {
-        p_p_multtable[i] = new int[t_length];
+        p_p_multtable[i] = new int[t_width];
     }
 
     for ( int i = 0; i < t_height; i++)
     {
-        for ( int j = 0; j < t_length; j++)
+        for ( int j = 0; j < t_width; j++)
         {
             if ( i == 0 )
                 p_p_multtable[i][j] = j;
