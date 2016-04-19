@@ -18,9 +18,12 @@ int main ()
 
     for ( int i = 0; i < t_height; i++)
     {
+
+        cout << sizeof(&table[i]) << " bytes" << endl;
         for ( int j = 0; j < t_width; j++)
         {
             cout << &table[i][j];
+            cout << endl;
         }    
         cout << endl;
     }
