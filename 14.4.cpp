@@ -14,6 +14,8 @@ struct friendTalk
 	int days_since;
 };
 
+// TODO Void copy array function
+
 int main ()
 {
 	friendTalk* p_friend = new friendTalk[4];
@@ -21,10 +23,23 @@ int main ()
 	string cont = "yes";
 	while (cont != "no")
 	{
+		cout << "Enter a friends name:\n";
+		// TODO getline below
+		cin >> *friendTalk.name;
 
+		cout << "How many days ago did you talk?\n";
+		// TODO Don't allow negative values below, make this a loop that requires positive ints
+		cin >> *friendTalk.days_since;
 
 		cout << "Add more? yes or no\n";
 		cin >> cont;
+		// TODO If we are continuing and the array is not large enough run copy and double array function
 	}
+
+	// TODO input option for function sort by days since
+	// TODO input option for function 
+
 	return 0;
 }
+
+// TODO copy function definition
