@@ -25,11 +25,11 @@ int main ()
 	{
 		cout << "Enter a friends name:\n";
 		// TODO getline below
-		cin >> *friendTalk.name;
+		// cin >> *p_friend.name;
 
 		cout << "How many days ago did you talk?\n";
 		// TODO Don't allow negative values below, make this a loop that requires positive ints
-		cin >> *friendTalk.days_since;
+		// cin >> *p_friend.days_since;
 
 		cout << "Add more? yes or no\n";
 		cin >> cont;
