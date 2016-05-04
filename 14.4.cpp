@@ -8,50 +8,66 @@
 
 using namespace std;
 
-struct friendTalk
+struct friendStruct
 {
-	string name;
-	int days_since;
+    string name;
+    int days_since;
 };
 
-int growArray(int* p_values, int *size);
+friendStruct* growArray(friendStruct* p_values, int *size);
 // TODO Void copy array function
 
 int main ()
 {
-	friendTalk* p_friend = new friendTalk[4];
+    int size = 2;
+    int* p_size = &size;
+    int cur_num = 0;
+    friendStruct* p_friend = new friendStruct[*p_size];
 
-	string cont = "yes";
-	while (cont != "no")
-	{
-		cout << "Enter a friends name:\n";
-		// TODO getline below
-		// cin >> *p_friend.name;
+    string cont = "yes";
+    while (cont != "no")
+    {
+        cout << "Enter a friends name:\n";
+        // TODO getline below
+        cin >> p_friend[cur_num].name;
 
-		cout << "How many days ago did you talk?\n";
-		// TODO Don't allow negative values below, make this a loop that requires positive ints
-		// cin >> *p_friend.days_since;
+        cout << "How many days ago did you talk?\n";
+        // TODO Don't allow negative values below, make this a loop that requires positive ints
+        cin >> p_friend[cur_num].days_since;
 
-		cout << "Add more? yes or no\n";
-		cin >> cont;
-		// TODO If we are continuing and the array is not large enough; run copy and double array function
-	}
+        cout << "Add more? yes or no\n";
+        cin >> cont;
+        // TODO
+        cur_num++;
+        cout << "CUR_NUM: " << cur_num << "\tSIZE: " << size << endl;
+        if (cur_num == *p_size)
+        {
+            p_friend = growArray(p_friend, p_size);
+        }
+        // TODO If we are continuing and the array is not large enough; run copy and double array function
 
-	// TODO input option for function sort by days since
-	// TODO input option for function 
+    }
 
-	return 0;
+    for (int i = 0; i < cur_num; i++)
+    {
+        cout << p_friend[i].name << endl;
+        cout << p_friend[i].days_since << endl;
+    }
+    // TODO input option for function sort by days since
+    // TODO input option for function 
+
+    return 0;
 }
 
 // TODO copy function definition
-int growArray(int* p_values, int *size)
+friendStruct* growArray(friendStruct* p_values, int *size)
 {
-	*size *= 2;
-	int *p_new_values = new int[*size];
-	for (int i = 0; i < (*size / 2); i++)
-	{
-		p_new_values[i] = p_values[i];
-	}
-	delete [] p_values;
-	return *p_new_values;
+    *size *= 2;
+    friendStruct *p_new_values = new friendStruct[*size];
+    for (int i = 0; i < (*size / 2); i++)
+    {
+        p_new_values[i] = p_values[i];
+    }
+    delete [] p_values;
+    return p_new_values;
 }
