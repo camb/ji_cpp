@@ -14,6 +14,7 @@ struct friendTalk
 	int days_since;
 };
 
+int growArray(int* p_values, int *size);
 // TODO Void copy array function
 
 int main ()
@@ -33,7 +34,7 @@ int main ()
 
 		cout << "Add more? yes or no\n";
 		cin >> cont;
-		// TODO If we are continuing and the array is not large enough run copy and double array function
+		// TODO If we are continuing and the array is not large enough; run copy and double array function
 	}
 
 	// TODO input option for function sort by days since
@@ -43,3 +44,14 @@ int main ()
 }
 
 // TODO copy function definition
+int growArray(int* p_values, int *size)
+{
+	*size *= 2;
+	int *p_new_values = new int[*size];
+	for (int i = 0; i < (*size / 2); i++)
+	{
+		p_new_values[i] = p_values[i];
+	}
+	delete [] p_values;
+	return *p_new_values;
+}
