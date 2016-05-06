@@ -10,8 +10,8 @@ struct boardSpace
     char status;
 };
 
-void displayBoard(boardSpace ***board, int height, int width);
-bool gameOver(boardSpace ***board, int height, int width);
+void displayBoard(boardSpace **board, int height, int width);
+bool gameOver(boardSpace **board, int height, int width);
 
 int main ()
 {
@@ -31,23 +31,18 @@ int main ()
         cin >> board_width;
     }
 
-    boardSpace ***p_p_board;
-    p_p_board = new boardSpace**[board_width];
+    boardSpace** p_p_board = new boardSpace*[board_height];
 
     for (int i = 0; i < board_height; i++)
     {
-        p_p_board[i] = new boardSpace*[board_width];
-        for (int j = 0; j < board_width; j++)
-        {
-            p_p_board[i][j] = new boardSpace[board_width];
-        }
+        p_p_board[i] = new boardSpace[board_width];
     }
 
     for (int i = 0; i < board_height; i++)
     {
         for (int j = 0; j < board_width; j++)
         {
-            p_p_board[i][j]->status = '_';
+            p_p_board[i][j].status = '_';
         }
     }
 
@@ -65,21 +60,21 @@ int main ()
         while (guess_again)
         {
             cin >> column;
-            if (column >= 0 && column < board_width && p_p_board[0][column]->status == '_' )
+            if (column >= 0 && column < board_width && p_p_board[0][column].status == '_' )
             {
                 // Iterate from the lowest slot to the highest
                 for (int i = board_height - 1; i >= 0; i--)
                 {
-                    if (p_p_board[i][column]->status == '_')
+                    if (p_p_board[i][column].status == '_')
                     {
                         // Change symbol depending upon player
                         if (cur_player == 1)
                         {
-                            p_p_board[i][column]->status = '+';
+                            p_p_board[i][column].status = '+';
                         }
                         else if (cur_player == 2)
                         {
-                            p_p_board[i][column]->status = 'x';
+                            p_p_board[i][column].status = 'x';
                         }
                         guess_again = false;
                         break;
@@ -108,7 +103,7 @@ int main ()
         {
             for (int j = 0; j < board_width; j++)
             {
-                if (p_p_board[i][j]->status == '_')
+                if (p_p_board[i][j].status == '_')
                 {
                     out_of_room = false;
                     break;
@@ -131,31 +126,27 @@ int main ()
     // Free board memory
     for (int i = 0; i < board_height; i++)
     {
-        for (int j = 0; j < board_width; j++)
-        {
-            delete p_p_board[i][j];
-        }
         delete [] p_p_board[i];
     }
     delete p_p_board;
-    
+
     return 0;
 }
 
 
-void displayBoard(boardSpace ***board, int height, int width)
+void displayBoard(boardSpace **board, int height, int width)
 {
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
-            cout << "[" << board[i][j]->status << "]";
+            cout << "[" << board[i][j].status << "]";
         }
         cout << endl;
     }
 }
 
-bool gameOver(boardSpace ***board, int height, int width)
+bool gameOver(boardSpace **board, int height, int width)
 {
     // Check the various 4 in a row possibilities
     // Vertical check
@@ -163,10 +154,10 @@ bool gameOver(boardSpace ***board, int height, int width)
     {
         for (int j = 0; j < width - 3 ; j++)
         {
-            if (board[i][j]->status != '_' &&
-                     board[i][j]->status == board[i][j + 1]->status &&
-                     board[i][j]->status == board[i][j + 2]->status &&
-                     board[i][j]->status == board[i][j + 3]->status)
+            if (board[i][j].status != '_' &&
+                     board[i][j].status == board[i][j + 1].status &&
+                     board[i][j].status == board[i][j + 2].status &&
+                     board[i][j].status == board[i][j + 3].status)
             {
                 return true;
             }
@@ -178,10 +169,10 @@ bool gameOver(boardSpace ***board, int height, int width)
     {
         for (int j = 0; j < width; j++)
         {
-            if (board[i][j]->status != '_' &&
-                board[i][j]->status == board[i + 1][j]->status &&
-                board[i][j]->status == board[i + 2][j]->status &&
-                board[i][j]->status == board[i + 3][j]->status)
+            if (board[i][j].status != '_' &&
+                board[i][j].status == board[i + 1][j].status &&
+                board[i][j].status == board[i + 2][j].status &&
+                board[i][j].status == board[i + 3][j].status)
             {
                 return true;
             }
@@ -193,10 +184,10 @@ bool gameOver(boardSpace ***board, int height, int width)
     {
         for (int j = 0; j < width - 3; j++)
         {
-            if (board[i][j]->status != '_' &&
-                board[i][j]->status == board[i + 1][j + 1]->status &&
-                board[i][j]->status == board[i + 2][j + 2]->status &&
-                board[i][j]->status == board[i + 3][j + 3]->status)
+            if (board[i][j].status != '_' &&
+                board[i][j].status == board[i + 1][j + 1].status &&
+                board[i][j].status == board[i + 2][j + 2].status &&
+                board[i][j].status == board[i + 3][j + 3].status)
             {
                 return true;
             }            
@@ -208,10 +199,10 @@ bool gameOver(boardSpace ***board, int height, int width)
     {
         for (int j = 3; j < width; j++)
         {
-            if (board[i][j]->status != '_' &&
-                board[i][j]->status == board[i + 1][j - 1]->status &&
-                board[i][j]->status == board[i + 2][j - 2]->status &&
-                board[i][j]->status == board[i + 3][j - 3]->status)
+            if (board[i][j].status != '_' &&
+                board[i][j].status == board[i + 1][j - 1].status &&
+                board[i][j].status == board[i + 2][j - 2].status &&
+                board[i][j].status == board[i + 3][j - 3].status)
             {
                 return true;
             }            
