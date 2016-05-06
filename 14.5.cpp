@@ -137,7 +137,8 @@ int main ()
         }
         delete [] p_p_board[i];
     }
-
+    delete p_p_board;
+    
     return 0;
 }
 
