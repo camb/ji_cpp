@@ -94,7 +94,7 @@ int main ()
 
         displayBoard(p_p_board, board_height, board_width);
 
-        // TODO Evaluate if gameOver() and break if so
+        // Evaluate if gameOver() and break if so
         if (gameOver(p_p_board, board_height, board_width))
         {
             cout << "Game Over! Player " << cur_player << " has won the game!\n";
@@ -111,6 +111,7 @@ int main ()
                 if (p_p_board[i][j]->status == '_')
                 {
                     out_of_room = false;
+                    break;
                 }
             }
         }
@@ -155,6 +156,8 @@ void displayBoard(boardSpace ***board, int height, int width)
 
 bool gameOver(boardSpace ***board, int height, int width)
 {
+    // Check the various 4 in a row possibilities
+    // Vertical check
     for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width - 3 ; j++)
@@ -169,6 +172,7 @@ bool gameOver(boardSpace ***board, int height, int width)
         }
     }
 
+    // Horizontal check
     for (int i = 0; i < height - 3; i++)
     {
         for (int j = 0; j < width; j++)
@@ -183,7 +187,35 @@ bool gameOver(boardSpace ***board, int height, int width)
         }
     }
 
-    // TODO Add both diagonal 4 in a row checks
+    // Upper left to bottom right diagonal check
+    for (int i = 0; i < height - 3; i++)
+    {
+        for (int j = 0; j < width - 3; j++)
+        {
+            if (board[i][j]->status != '_' &&
+                board[i][j]->status == board[i + 1][j + 1]->status &&
+                board[i][j]->status == board[i + 2][j + 2]->status &&
+                board[i][j]->status == board[i + 3][j + 3]->status)
+            {
+                return true;
+            }            
+        }
+    }
+
+    // Lower left to upper right diagonal check
+    for (int i = 0; i < height - 3; i++)
+    {
+        for (int j = 3; j < width; j++)
+        {
+            if (board[i][j]->status != '_' &&
+                board[i][j]->status == board[i + 1][j - 1]->status &&
+                board[i][j]->status == board[i + 2][j - 2]->status &&
+                board[i][j]->status == board[i + 3][j - 3]->status)
+            {
+                return true;
+            }            
+        }
+    }
 
     return false;
 }
