@@ -14,6 +14,7 @@ struct mazeTile
 
 void displayMaze(mazeTile** maze, int width, int height);
 bool inBounds(int width, int height, int test_w, int test_h);
+void makePath(mazeTile** maze, int w, int h, int cur_x, int cur_y);
 
 int main ()
 {
@@ -58,9 +59,9 @@ int main ()
     int start_w, start_h;
     while (true)
     {
-        cout << "LOOPIN'\n";
-        start_w = rand() % (width + 1);
-        start_h = rand() % (height + 1);
+        // cout << "LOOPIN'\n";
+        start_w = rand() % width;
+        start_h = rand() % height;
         if(start_h == 0 || start_w == 0)
         {
             cout << "ZERO REACHED\n";
@@ -74,9 +75,12 @@ int main ()
 
     displayMaze(p_p_maze, width, height);
 
-
+    cout << "The Maze:\n";
+    makePath(p_p_maze, width, height, start_w, start_h);
+    displayMaze(p_p_maze, width, height);
 
     // TODO walk the array randomly and create a valid maze trail that terminates once it reaches another board edge
+
     // TODO Walk should check that each proceeding random step is on s tile that is only touching 1 other path tile
     // TODO Some sort of logic/check to prevent the maze from walking in a spiral/deadend and trapping itself.
     // TODO display the true path
@@ -112,10 +116,62 @@ void displayMaze(mazeTile** maze, int width, int height)
 
 bool inBounds(int width, int height, int test_w, int test_h)
 {
-    if (test_w > width || test_w < 0)
+    if (test_w >= width || test_w < 0)
         return false;
-    else if (test_h > height || test_h < 0)
+    else if (test_h >= height || test_h < 0)
         return false;
     else
         return true;
+}
+
+
+void makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h)
+{
+
+    bool tryU = false, tryD = false, tryL = false, tryR = false;
+    while(true)
+    {
+        int randtry = rand() % 4;
+        switch (randtry)
+        {
+        case 0:
+            if (inBounds(w, h, cur_w, cur_h - 1) &&
+                maze[cur_h - 1][cur_w].isPath == false)
+            {
+                maze[cur_h - 1][cur_w].isPath = true;
+                cur_h--;
+            }
+            break;
+        case 1:
+            if (inBounds(w, h, cur_w, cur_h + 1) &&
+                maze[cur_h + 1][cur_w].isPath == false)
+            {
+                maze[cur_h + 1][cur_w].isPath = true;
+                cur_h++;
+            }
+            break;
+        case 2:
+            if (inBounds(w, h, cur_w - 1, cur_h) &&
+                maze[cur_h][cur_w - 1].isPath == false)
+            {
+                maze[cur_h][cur_w - 1].isPath = true;
+                cur_w--;
+            }
+            break;
+        case 3:
+            if (inBounds(w, h, cur_w + 1, cur_h) &&
+                maze[cur_h][cur_w + 1].isPath == false)
+            {
+                maze[cur_h][cur_w + 1].isPath = true;
+                cur_w++;
+            }
+            break;
+        }
+
+        if (tryU == true && tryD == true && tryL == true && tryR == true)
+        {
+            cout << "No options left!\n";
+            break;
+        }
+    }
 }
