@@ -96,7 +96,7 @@ int main ()
     // Free maze memory
     for (int i = 0; i < height; i++)
     {
-        delete p_p_maze[i];
+        delete [] p_p_maze[i];
     }
     delete [] p_p_maze;
 }
