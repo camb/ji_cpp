@@ -50,7 +50,6 @@ int main ()
     while (true)
     {
         // Initialize the blank maze
-        cout << "Clear and making maze\n";
         for (int i = 0; i < height; i++)
         {
             for (int j = 0; j < width; j++)
@@ -59,8 +58,8 @@ int main ()
             }
         }
 
-        int start_w = width / (rand() % 2 + 2);
-        int start_h = height / (rand() % 2 + 2);
+        int start_w = width / 2;
+        int start_h = height / 2;
         p_p_maze[start_h][start_w].isPath = true;
         a = makePath(p_p_maze, width, height, start_w, start_h, true);
         b = makePath(p_p_maze, width, height, start_w, start_h, true);
@@ -77,29 +76,20 @@ int main ()
     displayMaze(p_p_maze, width, height);
 
     // Create false paths that terminate before board edges
-    for (int i = 0; i < height; i++)
+    for (int x = 0; x < 12; x++)
     {
-        for (int j = 0; j < width; j++)
+        for (int i = 0; i < height; i++)
         {
-            if (p_p_maze[i][j].isPath == true)
+            for (int j = 0; j < width; j++)
             {
-                // cout << "Attempting p_p_maze i: " << i << " j: " << j << endl;
-                makePath(p_p_maze, width, height, i, j, false);
+                if (p_p_maze[i][j].isPath == true)
+                {
+                    makePath(p_p_maze, width, height, i, j, false);
+                }
             }
         }
     }
 
-    for (int i = 0; i < height; i++)
-    {
-        for (int j = 0; j < width; j++)
-        {
-            if (p_p_maze[i][j].isPath == true)
-            {
-                // cout << "Attempting p_p_maze i: " << i << " j: " << j << endl;
-                makePath(p_p_maze, width, height, i, j, false);
-            }
-        }
-    }
     cout << "Complete maze:\n";
     displayMaze(p_p_maze, width, height);
 
@@ -155,7 +145,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
             switch (randtry)
             {
             case 0:
-                if (inBounds(w, h, cur_w, cur_h - 1) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w, cur_h - 1) &&
                     maze[cur_h - 1][cur_w].isPath == false &&
                     inBounds(w, h, cur_w + 1, cur_h - 1) &&
                     maze[cur_h - 1][cur_w + 1].isPath == false &&
@@ -176,7 +167,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                 break;
 
             case 1:
-                if (inBounds(w, h, cur_w, cur_h + 1) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w, cur_h + 1) &&
                     maze[cur_h + 1][cur_w].isPath == false &&
                     inBounds(w, h, cur_w + 1, cur_h + 1) &&
                     maze[cur_h + 1][cur_w + 1].isPath == false &&
@@ -197,7 +189,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                 break;
 
             case 2:
-                if (inBounds(w, h, cur_w - 1, cur_h) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w - 1, cur_h) &&
                     maze[cur_h][cur_w - 1].isPath == false &&
                     inBounds(w, h, cur_w - 1, cur_h + 1) &&
                     maze[cur_h + 1][cur_w - 1].isPath == false &&
@@ -218,7 +211,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                 break;
 
             case 3:
-                if (inBounds(w, h, cur_w + 1, cur_h) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w + 1, cur_h) &&
                     maze[cur_h][cur_w + 1].isPath == false &&
                     inBounds(w, h, cur_w + 1, cur_h + 1) &&
                     maze[cur_h + 1][cur_w + 1].isPath == false &&
@@ -245,7 +239,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                     switch (randtry)
             {
             case 0:
-                if (inBounds(w, h, cur_w, cur_h - 1) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w, cur_h - 1) &&
                     maze[cur_h - 1][cur_w].isPath == false &&
                     inBounds(w, h, cur_w + 1, cur_h - 1) &&
                     maze[cur_h - 1][cur_w + 1].isPath == false &&
@@ -266,7 +261,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                 break;
 
             case 1:
-                if (inBounds(w, h, cur_w, cur_h + 1) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w, cur_h + 1) &&
                     maze[cur_h + 1][cur_w].isPath == false &&
                     inBounds(w, h, cur_w + 1, cur_h + 1) &&
                     maze[cur_h + 1][cur_w + 1].isPath == false &&
@@ -287,7 +283,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                 break;
 
             case 2:
-                if (inBounds(w, h, cur_w - 1, cur_h) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w - 1, cur_h) &&
                     maze[cur_h][cur_w - 1].isPath == false &&
                     inBounds(w, h, cur_w - 1, cur_h + 1) &&
                     maze[cur_h + 1][cur_w - 1].isPath == false &&
@@ -308,7 +305,8 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
                 break;
 
             case 3:
-                if (inBounds(w, h, cur_w + 1, cur_h) &&
+                if (maze[cur_h][cur_w].isPath == true &&
+                    inBounds(w, h, cur_w + 1, cur_h) &&
                     maze[cur_h][cur_w + 1].isPath == false &&
                     inBounds(w, h, cur_w + 1, cur_h + 1) &&
                     maze[cur_h + 1][cur_w + 1].isPath == false &&
