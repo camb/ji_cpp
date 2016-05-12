@@ -44,10 +44,9 @@ int main ()
         p_p_maze[i] = new mazeTile[width];
     }
 
-
-    // TODO makePath == 2 continue to fake paths else clear and redo maze
     // Establish the true maze path
     int a = 0, b = 0;
+    int attempts = 0;
     while (true)
     {
         // Initialize the blank maze
@@ -63,16 +62,16 @@ int main ()
         int start_w = width / (rand() % 2 + 2);
         int start_h = height / (rand() % 2 + 2);
         p_p_maze[start_h][start_w].isPath = true;
-        // cout << "Start Width: " << start_w << " Height: " << start_h << endl;
         a = makePath(p_p_maze, width, height, start_w, start_h, true);
         b = makePath(p_p_maze, width, height, start_w, start_h, true);
-        if (a + b == 2)
+        // If both paths reach valid maze exits, stop path creation loop
+        if (a == 1 && b == 1)
         {
-            break;   
+            break;
         }
-        // else
-        //     break;
+        attempts++;
     }
+    cout << "This maze took " << attempts + 1 << " attempts to generate.\n";
 
     cout << "Complete path:\n";
     displayMaze(p_p_maze, width, height);
@@ -103,10 +102,6 @@ int main ()
     }
     cout << "Complete maze:\n";
     displayMaze(p_p_maze, width, height);
-
-    // TODO Some sort of logic/check to prevent the maze from walking in a spiral/deadend and trapping itself.
-    // TODO display the true path
-    // TODO display the complete maze
 
     // Free maze memory
     for (int i = 0; i < height; i++)
@@ -155,105 +150,204 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
     while(cont)
     {
         int randtry = rand() % 4;
-        switch (randtry)
+        if (hit_edge == true)
         {
-        case 0:
-            if (inBounds(w, h, cur_w, cur_h - 1) &&
-                maze[cur_h - 1][cur_w].isPath == false &&
-                inBounds(w, h, cur_w + 1, cur_h - 1) &&
-                maze[cur_h - 1][cur_w + 1].isPath == false &&
-                inBounds(w, h, cur_w - 1, cur_h - 1) &&
-                maze[cur_h - 1][cur_w - 1].isPath == false)
+            switch (randtry)
             {
-                cur_h--;
-                cont = false;
-                // cout << "Up! ";
-            }
-            else
-            {
-                tryU = true;
-            }
-            
-            break;
+            case 0:
+                if (inBounds(w, h, cur_w, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w - 1].isPath == false &&
+                    ((inBounds(w, h, cur_w, cur_h - 2) &&
+                    maze[cur_h - 2][cur_w].isPath == false) || cur_h - 1 == 0))
+                {
+                    cur_h--;
+                    cont = false;
+                    // cout << "Up! ";
+                }
+                else
+                {
+                    tryU = true;
+                }
+                
+                break;
 
-        case 1:
-            if (inBounds(w, h, cur_w, cur_h + 1) &&
-                maze[cur_h + 1][cur_w].isPath == false &&
-                inBounds(w, h, cur_w + 1, cur_h + 1) &&
-                maze[cur_h + 1][cur_w + 1].isPath == false &&
-                inBounds(w, h, cur_w - 1, cur_h + 1) &&
-                maze[cur_h + 1][cur_w - 1].isPath == false)
-            {
-                cur_h++;
-                cont = false;
-                // cout << "Down! ";
-            }
-            else
-            {
-                tryD = true;
-            }
+            case 1:
+                if (inBounds(w, h, cur_w, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w - 1].isPath == false &&
+                    ((inBounds(w, h, cur_w, cur_h + 2) &&
+                    maze[cur_h + 2][cur_w].isPath == false) || cur_h + 1 == h))
+                {
+                    cur_h++;
+                    cont = false;
+                    // cout << "Down! ";
+                }
+                else
+                {
+                    tryD = true;
+                }
 
-            break;
+                break;
 
-        case 2:
-            if (inBounds(w, h, cur_w - 1, cur_h) &&
-                maze[cur_h][cur_w - 1].isPath == false &&
-                inBounds(w, h, cur_w - 1, cur_h + 1) &&
-                maze[cur_h + 1][cur_w - 1].isPath == false &&
-                inBounds(w, h, cur_w - 1, cur_h - 1) &&
-                maze[cur_h - 1][cur_w - 1].isPath == false)
-            {
-                cur_w--;
-                cont = false;
-                // cout << "Left! ";
-            }
-            else
-            {
-                tryL = true;
-            }
+            case 2:
+                if (inBounds(w, h, cur_w - 1, cur_h) &&
+                    maze[cur_h][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w - 1].isPath == false &&
+                    ((inBounds(w, h, cur_w - 2, cur_h) &&
+                    maze[cur_h][cur_w - 2].isPath == false) || cur_w - 1 == 0))
+                {
+                    cur_w--;
+                    cont = false;
+                    // cout << "Left! ";
+                }
+                else
+                {
+                    tryL = true;
+                }
 
-            break;
+                break;
 
-        case 3:
-            if (inBounds(w, h, cur_w + 1, cur_h) &&
-                maze[cur_h][cur_w + 1].isPath == false &&
-                inBounds(w, h, cur_w + 1, cur_h + 1) &&
-                maze[cur_h + 1][cur_w + 1].isPath == false &&
-                inBounds(w, h, cur_w + 1, cur_h - 1) &&
-                maze[cur_h - 1][cur_w + 1].isPath == false)
-            {
-                cur_w++;
-                cont = false;
-                // cout << "Right! ";
-            }
-            else
-            {
-                tryR = true;
-            }
+            case 3:
+                if (inBounds(w, h, cur_w + 1, cur_h) &&
+                    maze[cur_h][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w + 1].isPath == false &&
+                    ((inBounds(w, h, cur_w + 2, cur_h) &&
+                    maze[cur_h][cur_w + 2].isPath == false) || cur_w + 1 == w))
+                {
+                    cur_w++;
+                    cont = false;
+                    // cout << "Right! ";
+                }
+                else
+                {
+                    tryR = true;
+                }
 
-            break;
+                break;
+            }
+        }
+        // Adding additional loging to avoid creating intersecting paths
+        else if (hit_edge == false)
+        {
+                    switch (randtry)
+            {
+            case 0:
+                if (inBounds(w, h, cur_w, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w, cur_h - 2) &&
+                    maze[cur_h - 2][cur_w].isPath == false)
+                {
+                    cur_h--;
+                    cont = false;
+                    // cout << "Up! ";
+                }
+                else
+                {
+                    tryU = true;
+                }
+                
+                break;
+
+            case 1:
+                if (inBounds(w, h, cur_w, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w, cur_h + 2) &&
+                    maze[cur_h + 2][cur_w].isPath == false)
+                {
+                    cur_h++;
+                    cont = false;
+                    // cout << "Down! ";
+                }
+                else
+                {
+                    tryD = true;
+                }
+
+                break;
+
+            case 2:
+                if (inBounds(w, h, cur_w - 1, cur_h) &&
+                    maze[cur_h][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w - 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w - 1].isPath == false &&
+                    inBounds(w, h, cur_w - 2, cur_h) &&
+                    maze[cur_h][cur_w - 2].isPath == false)
+                {
+                    cur_w--;
+                    cont = false;
+                    // cout << "Left! ";
+                }
+                else
+                {
+                    tryL = true;
+                }
+
+                break;
+
+            case 3:
+                if (inBounds(w, h, cur_w + 1, cur_h) &&
+                    maze[cur_h][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h + 1) &&
+                    maze[cur_h + 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w + 1, cur_h - 1) &&
+                    maze[cur_h - 1][cur_w + 1].isPath == false &&
+                    inBounds(w, h, cur_w + 2, cur_h) &&
+                    maze[cur_h][cur_w + 2].isPath == false)
+                {
+                    cur_w++;
+                    cont = false;
+                    // cout << "Right! ";
+                }
+                else
+                {
+                    tryR = true;
+                }
+
+                break;
+            }
         }
 
         if (tryU == true && tryD == true && tryL == true && tryR == true)
         {
             // cout << "No options left!\n";
             return 0;
-            // break;
         }
-
     }
 
     // Don't draw if an edge on a non-edge terminal
-    if (hit_edge == false)
+    if (hit_edge == false &&
+        (cur_h == 0 || cur_w == 0 || cur_w == w -1 || cur_h == h - 1))
     {
-        if (cur_h == 0 || cur_w == 0 || cur_w == w -1 || cur_h == h - 1)
-        {
-            // cout << "Non-edge terminal!\n";
-            return 0;
-        }
+        // cout << "Non-edge terminal!\n";
+        return 0;
     }
-    
-    maze[cur_h][cur_w].isPath = true;
+    else
+    {
+        maze[cur_h][cur_w].isPath = true;
+    }
 
     // If the maze has hit another edge, break
     if (hit_edge == true &&
@@ -266,14 +360,13 @@ int makePath(mazeTile** maze, int w, int h, int cur_w, int cur_h, bool hit_edge)
     // If we haven't hit an edge and should, recurse with hit_edge = true
     else if (hit_edge == true)
     {
-        makePath(maze, w, h, cur_w, cur_h, true);
-        return 0;
+        return makePath(maze, w, h, cur_w, cur_h, true);
+        
     }
     // If we haven't hit an edge and shouldn't, recurse with hit_edge = false
     // (hit_edge == false)
     else if (hit_edge == false)
     {
-        makePath(maze, w, h, cur_w, cur_h, false);
-        return 0;
+        return makePath(maze, w, h, cur_w, cur_h, false);
     }
 }
