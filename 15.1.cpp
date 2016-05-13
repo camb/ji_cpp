@@ -5,14 +5,81 @@
 
 using namespace std;
 
-// TODO Define the basic linked list struct
-// TODO Instantiate the remove element function that takes a struct pointer argument
+// Basic linked list struct
+struct llist
+{
+    int num;
+    llist* next;
+};
+
+// Instantiate the remove element function that takes a struct pointer argument
+void removeItem(llist* orig_list, int remove_num);
 
 int main ()
 {
-    // TODO Create the initial linked list pointer
-    // TODO Define a few structs and link them together
+    // Create the initial linked list pointer
+    llist* p_first = new llist;
+    p_first->num = 14;
+
+    // Define a few structs and link them together
+    llist* p_temp = new llist;
+    p_temp->num = 99;
+    p_first->next = p_temp;
+    p_temp = new llist;
+    p_temp->num = 69;
+    p_first->next->next = p_temp;
+    p_first->next->next->next = NULL;
+
+    // Cout the linked list items
+    p_temp = p_first;
+    while (p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
+
+    removeItem(p_first, 14);
+
+    // Cout the linked list items
+    p_temp = p_first;
+    while (p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
+
     // TODO Run the remove function on a specific struct
 }
 
 // TODO Define the remove element function that takes a struct pointer argument
+void removeItem(llist* orig_list, int remove_num)
+{
+    llist* p_cur = new llist;
+    llist* p_prev = new llist;
+    p_cur = orig_list;
+    p_prev = orig_list;
+    while (p_cur->next != NULL)
+    {
+        // If first item in linked list matches
+        if (p_prev == p_cur && p_cur->num == remove_num)
+        {
+            orig_list = orig_list->next;
+            p_cur = p_cur->next;
+            delete p_prev;
+            p_prev = p_cur;
+        }
+        // If middle item in linked list matches
+        else if (p_cur->num == remove_num)
+        {
+            p_prev->next = p_cur->next;
+            delete p_cur;
+            p_cur = p_prev->next;
+        }
+        // If item num doesn't match
+        else
+        {
+            p_prev = p_cur;
+            p_cur = p_cur->next;
+        }
+    }
+}
