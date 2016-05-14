@@ -30,7 +30,8 @@ int main ()
     p_first->next->next = p_temp;
     p_first->next->next->next = NULL;
 
-    // Cout the linked list items
+    // Cout the linked list items before removal
+    cout << "Before removal:\n";
     p_temp = p_first;
     while (p_temp != NULL)
     {
@@ -38,9 +39,10 @@ int main ()
         p_temp = p_temp->next;
     }
 
-    removeItem(p_first, 14);
+    removeItem(p_first, 69);
 
-    // Cout the linked list items
+    // Cout the linked list items after removal
+    cout << "After removal:\n";
     p_temp = p_first;
     while (p_temp != NULL)
     {
@@ -58,6 +60,7 @@ void removeItem(llist* orig_list, int remove_num)
     llist* p_prev = new llist;
     p_cur = orig_list;
     p_prev = orig_list;
+    // TODO need p_next for while loop detection
     while (p_cur->next != NULL)
     {
         // If first item in linked list matches
@@ -69,11 +72,18 @@ void removeItem(llist* orig_list, int remove_num)
             p_prev = p_cur;
         }
         // If middle item in linked list matches
-        else if (p_cur->num == remove_num)
+        else if (p_cur->num == remove_num && p_cur->next != NULL)
         {
             p_prev->next = p_cur->next;
             delete p_cur;
             p_cur = p_prev->next;
+        }
+        // If last item in linked list matches
+        else if (p_cur->num == remove_num && p_cur->next == NULL)
+        {
+            p_prev->next = NULL;
+            delete p_cur;
+            p_cur = NULL;
         }
         // If item num doesn't match
         else
