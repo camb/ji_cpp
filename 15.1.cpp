@@ -69,6 +69,11 @@ int main ()
         cout << p_temp->num << endl;
         p_temp = p_temp->next;
     }
+
+    p_temp = NULL;
+    p_first = NULL;
+    delete p_temp;
+    delete p_first;
 }
 
 
