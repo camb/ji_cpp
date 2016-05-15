@@ -13,7 +13,8 @@ struct llist
 };
 
 // Instantiate the remove element function that takes a struct pointer argument
-void removeItem(llist* orig_list, int remove_num);
+// Had to pass the list as a pointer reference to get the value to change if first item is deleted without return
+void removeItem(llist* &p_orig_first, int remove_num);
 
 int main ()
 {
@@ -39,10 +40,9 @@ int main ()
         p_temp = p_temp->next;
     }
 
-    removeItem(p_first, 69);
-
+    cout << "Removing 99:\n";
+    removeItem(p_first, 99);
     // Cout the linked list items after removal
-    cout << "After removal:\n";
     p_temp = p_first;
     while (p_temp != NULL)
     {
@@ -50,26 +50,45 @@ int main ()
         p_temp = p_temp->next;
     }
 
-    // TODO Run the remove function on a specific struct
+    cout << "Removing 69:\n";
+    removeItem(p_first, 69);
+    // Cout the linked list items after removal
+    p_temp = p_first;
+    while (p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
+
+    cout << "Removing 14:\n";
+    removeItem(p_first, 14);
+    // Cout the linked list items after removal
+    p_temp = p_first;
+    while (p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
 }
 
-// TODO Define the remove element function that takes a struct pointer argument
-void removeItem(llist* orig_list, int remove_num)
+
+void removeItem(llist* &p_orig_first, int remove_num)
 {
     llist* p_cur = new llist;
     llist* p_prev = new llist;
-    p_cur = orig_list;
-    p_prev = orig_list;
-    // TODO need p_next for while loop detection
-    while (p_cur->next != NULL)
+    p_cur = p_orig_first;
+    p_prev = NULL;
+
+    while (p_cur != NULL)
     {
         // If first item in linked list matches
-        if (p_prev == p_cur && p_cur->num == remove_num)
+        if (p_cur == p_orig_first && p_cur->num == remove_num)
         {
-            orig_list = orig_list->next;
-            p_cur = p_cur->next;
-            delete p_prev;
             p_prev = p_cur;
+            p_cur = p_cur->next;
+            p_orig_first = p_cur;
+            delete p_prev;
+            p_prev = NULL;
         }
         // If middle item in linked list matches
         else if (p_cur->num == remove_num && p_cur->next != NULL)
@@ -77,6 +96,7 @@ void removeItem(llist* orig_list, int remove_num)
             p_prev->next = p_cur->next;
             delete p_cur;
             p_cur = p_prev->next;
+            p_prev = p_prev;
         }
         // If last item in linked list matches
         else if (p_cur->num == remove_num && p_cur->next == NULL)
@@ -85,11 +105,17 @@ void removeItem(llist* orig_list, int remove_num)
             delete p_cur;
             p_cur = NULL;
         }
-        // If item num doesn't match
+        // Else proceed down linked list
         else
         {
             p_prev = p_cur;
             p_cur = p_cur->next;
         }
     }
+
+    // Freeing memory
+    p_cur = NULL;
+    p_prev = NULL;
+    delete p_cur;
+    delete p_prev;
 }
