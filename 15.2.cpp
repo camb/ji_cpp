@@ -12,8 +12,7 @@ struct node
     node* prev;
 };
 
-// void add node sorted function
-void addSortedNode(node* &linked_list, int new_num);
+int addSortedNode(node* &linked_list, int new_num);
 
 int main ()
 {
@@ -31,7 +30,7 @@ int main ()
     p_temp->prev->next = p_temp;
     p_temp->next = NULL;
 
-    // TODO run function a few times with numbers to sort that will interact with the original numbers and eachother
+    cout << "\nOriginal linked list:\n";
     p_temp = p_first;
     while(p_temp != NULL)
     {
@@ -39,8 +38,36 @@ int main ()
         p_temp = p_temp->next;
     }
 
+    // Run function a few times with numbers to sort that will interact with the original numbers and eachother
+    cout << "\nAdding 4:\n";
     addSortedNode(p_first, 4);
+    p_temp = p_first;
+    while(p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
 
+    cout << "\nAdding 60:\n";
+    addSortedNode(p_first, 60);
+    p_temp = p_first;
+    while(p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
+
+    cout << "\nAdding 59:\n";
+    addSortedNode(p_first, 59);
+    p_temp = p_first;
+    while(p_temp != NULL)
+    {
+        cout << p_temp->num << endl;
+        p_temp = p_temp->next;
+    }
+
+    cout << "\nAdding 205:\n";
+    addSortedNode(p_first, 205);
     p_temp = p_first;
     while(p_temp != NULL)
     {
@@ -56,9 +83,8 @@ int main ()
 }
 
 
-void addSortedNode(node* &linked_list, int new_num)
+int addSortedNode(node* &linked_list, int new_num)
 {
-    cout << "blah\n";
     node* p_cur = linked_list;
     node* p_temp = new node;
     p_temp->num = new_num;
@@ -69,14 +95,29 @@ void addSortedNode(node* &linked_list, int new_num)
         p_temp->next = linked_list;
         linked_list->prev = p_temp;
         linked_list = p_temp;
+        return 0;
     }
 
     // Loop through linked list to find where the new node will sit, break if hit end
-    while(p_temp->num >= p_cur && p_cur != NULL)
+    while(p_temp->num >= p_cur->num)
     {
-
+        // If it's the largest number, put it at the end of the list and stop
+        if(p_cur->next == NULL)
+        {
+            p_cur->next = p_temp;
+            p_temp->prev = p_cur;
+            p_temp->next = NULL;
+            return 0;
+        }
+        p_cur = p_cur->next;
     }
-    // TODO while cur_p !+ NULL loop
-    // TODO if num > cur_p, proceed to next item in linked list
-    // TODO if reach NULL and no nums are greater, 
+
+    p_cur->prev->next = p_temp;
+    p_temp->prev = p_cur->prev;
+    p_cur->prev = p_temp;
+    p_temp->next = p_cur;
+
+    p_temp = NULL;
+    delete p_temp;
+    return 0;
 }
