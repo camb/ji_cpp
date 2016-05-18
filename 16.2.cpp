@@ -5,7 +5,7 @@
 
 using namespace std;
 
-void reverseArray(char array[], int size);
+void reverseArray(char array[], int size, int cur);
 
 int main()
 {
@@ -37,17 +37,16 @@ int main()
 	alphabet[24] = 'y';
 	alphabet[25] = 'z';
 
-	reverseArray(alphabet, 25);
+	reverseArray(alphabet, 25, 0);
 	cout << endl;
 }
 
-void reverseArray(char array[], int size)
+void reverseArray(char array[], int size, int cur)
 {
-	cout << array[size];
-
-	if (size > 0)
+	if (cur < size)
 	{
-		reverseArray(array, size -1);
+		reverseArray(array, size, cur + 1);
 	}
 
+	cout << array[cur];
 }
