@@ -20,7 +20,6 @@ int main ()
     sorted_ints[6] = 52;
     sorted_ints[7] = 61;
     sorted_ints[8] = 77;
-    sorted_ints[9] = 100;
 
     for (int i = 0; i < 10; i++)
     {
