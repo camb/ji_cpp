@@ -86,18 +86,6 @@ int solveHanoi(int towers[4][3], int height, int column)
         return 0;
     }
 
-    // Loop over colums to find available openings
-    int top0 = 0;
-    int top1 = 0;
-    int top2 = 0;
-    for (int c = 0; c < 3; c++)
-    {
-        for (int h = 3; h >= 0; h--)
-        {
-            if 
-        }
-    }
-
     for (int c = 0; c < 3; c++)
     {
         // Don't search the current value's column
