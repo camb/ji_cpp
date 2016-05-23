@@ -125,6 +125,17 @@ int solveHanoi(int towers[4][3], int height, int column)
                 towers[0][c] = cur;
                 // Display towers after each iteration to show steps.
                 printTowers(towers);
+                // if (towers[0][2] == 4 && towers[1][2] == 2)
+                // {
+                //     solveHanoi(towers, 0, 1);
+                //     // solveHanoi(towers, 1, 2);
+                //     // solveHanoi(towers, 2, 1);
+                //     cout << "WE DID IT CHAMP\n\n\n\n";
+                // }
+                // else if (towers[0][2] == 4 && towers[0][1] == 3)
+                // {
+                //     solveHanoi(towers, 0, 1);
+                // }
                 return 0;
             }
     }
@@ -145,24 +156,20 @@ int solveHanoi(int towers[4][3], int height, int column)
     }
 
     // If nothing is available, move column with lowest value to clear space
-    for (int c = 0; c < 3; c++)
+    if (towers[0][0] != 0 && towers[0][1] != 0 && towers[0][2] != 0)
     {
-        for (int h = 0; h < 4; h++)
+        for (int c = 0; c < 3; c++)
         {
-            if (towers[h][c] == 1)
+            for (int h = 0; h < 4; h++)
             {
-                solveHanoi(towers, 0, c);
-                solveHanoi(towers, height, column);
-                return 0;
+                if (towers[h][c] == 1)
+                {
+                    solveHanoi(towers, 0, c);
+                    // Once space is cleared, move original again
+                    solveHanoi(towers, height, column);
+                    return 0;
+                }
             }
         }
     }
-
-    cout << "HEIGHT: " << height << " COLUMN: " << column << endl;
-    printTowers(towers);
-
-
-    // Final run of towers to get them in correct place
-    cout << "FINAL SOLUTION!";
-    solveHanoi(towers, 0, 1);
 }
