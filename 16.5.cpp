@@ -37,6 +37,8 @@ int main ()
     }
 
     solveHanoi(towers, 0, 0);
+    cout << "\nFinal Output:\n";
+    printTowers(towers);
 
     // TODO create a recursive function to move disks
 }
@@ -69,27 +71,33 @@ int solveHanoi(int towers[4][3], int height, int column)
     // Easier variable to work with for the current location value
     int cur = towers[height][column];
 
-    // If value above current value you're trying to move, recurvively call solve hanoi on that tile
-    if (height != 3 && towers[height + 1][column] != 0)
+    // Individual base cases to exit recursive function when value in correct location
+    if ( cur == 4 && towers[0][2] == 4)
     {
-        solveHanoi(towers, height + 1, column);
+        return 0;
     }
-
-    // Base case that will exit recusion
-    if (towers[0][2] == 4 &&
-        towers[1][2] == 3 &&
-        towers[2][2] == 2 &&
-        towers[3][2] == 1)
+    else if ( cur == 3 && towers[1][2] == 3)
+    {
+        return 0;
+    }
+    else if ( cur == 2 && towers[2][2] == 2)
+    {
+        return 0;
+    }
+    else if ( cur == 1 && towers[3][2] == 1)
     {
         cout << "The tower is solved!\n";
         printTowers(towers);
         return 0;
     }
 
+    // If value above current value you're trying to move, recurvively call solve hanoi on that tile
+    if (height != 3 && towers[height + 1][column] != 0)
+    {
+        solveHanoi(towers, height + 1, column);
+    }
 
-
-
-    // move on top of NEAREST value if available
+    // Move on top of NEAREST value if available
     for (int c = 0; c < 3; c++)
     {
         // Don't search the current value's column
@@ -107,39 +115,7 @@ int solveHanoi(int towers[4][3], int height, int column)
                 return 0;
             }
         }   
-    } 
-
-    // move on top of OPEN column if available
-    for (int c = 0; c < 3; c++)
-    {
-        // Don't search the current value's column
-        if (c == column)
-        {
-            continue;
-        }
-
-        // If a column is open, move the value to the open column
-        else if (towers[0][c] == 0)
-            {
-                towers[height][column] = 0;
-                towers[0][c] = cur;
-                // Display towers after each iteration to show steps.
-                printTowers(towers);
-                // if (towers[0][2] == 4 && towers[1][2] == 2)
-                // {
-                //     solveHanoi(towers, 0, 1);
-                //     // solveHanoi(towers, 1, 2);
-                //     // solveHanoi(towers, 2, 1);
-                //     cout << "WE DID IT CHAMP\n\n\n\n";
-                // }
-                // else if (towers[0][2] == 4 && towers[0][1] == 3)
-                // {
-                //     solveHanoi(towers, 0, 1);
-                // }
-                return 0;
-            }
     }
-
 
     // move on top of LARGER value if available
     for (int c = 0; c < 3; c++)
@@ -155,20 +131,43 @@ int solveHanoi(int towers[4][3], int height, int column)
         }
     }
 
-    // If nothing is available, move column with lowest value to clear space
-    if (towers[0][0] != 0 && towers[0][1] != 0 && towers[0][2] != 0)
+    // Move on top of OPEN column if available
+    for (int c = 0; c < 3; c++)
     {
-        for (int c = 0; c < 3; c++)
+        // Don't search the current value's column
+        if (c == column)
         {
-            for (int h = 0; h < 4; h++)
+            continue;
+        }
+
+        // If a column is open, move the value to the open column
+        else if (towers[0][c] == 0)
             {
-                if (towers[h][c] == 1)
-                {
-                    solveHanoi(towers, 0, c);
-                    // Once space is cleared, move original again
-                    solveHanoi(towers, height, column);
-                    return 0;
-                }
+                towers[height][column] = 0;
+                towers[0][c] = cur;
+                // Display towers after each iteration to show steps.
+                printTowers(towers);
+                return 0;
+            }
+    }
+
+    // If there is nowhere to move a value, call function on column containing 1
+    for (int c = 0; c < 3; c++)
+    {
+        // Don't search the current value's column
+        if (c == column)
+        {
+            continue;
+        }
+
+        for (int h = 0; h < 4; h++)
+        {
+            if (towers[h][c] == 1)
+            {
+                solveHanoi(towers, 0, c);
+                // Once space is cleared, move original again
+                solveHanoi(towers, height, column);
+                return 0;
             }
         }
     }
