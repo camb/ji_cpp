@@ -40,7 +40,7 @@ int main ()
     cout << "\nFinal Output:\n";
     printTowers(towers);
 
-    // TODO create a recursive function to move disks
+    return 0;
 }
 
 void printTowers(int towers[4][3])
@@ -63,7 +63,7 @@ void printTowers(int towers[4][3])
 
 int solveHanoi(int towers[4][3], int height, int column)
 {
-    cout << "HEIGHT: " << height << " COLUMN: " << column << endl;
+    // cout << "HEIGHT: " << height << " COLUMN: " << column << endl;
 
     // Display towers after each iteration to show steps.
     printTowers(towers);
@@ -71,7 +71,13 @@ int solveHanoi(int towers[4][3], int height, int column)
     // Easier variable to work with for the current location value
     int cur = towers[height][column];
 
-    // Individual base cases to exit recursive function when value in correct location
+    // If value above current location, recurvively call solve hanoi on that tile
+    if (height != 3 && towers[height + 1][column] != 0)
+    {
+        solveHanoi(towers, height + 1, column);
+    }
+
+    // Base cases to exit recursive function if values are in correct location
     if ( cur == 4 && towers[0][2] == 4)
     {
         return 0;
@@ -86,18 +92,10 @@ int solveHanoi(int towers[4][3], int height, int column)
     }
     else if ( cur == 1 && towers[3][2] == 1)
     {
-        cout << "The tower is solved!\n";
-        printTowers(towers);
         return 0;
     }
 
-    // If value above current value you're trying to move, recurvively call solve hanoi on that tile
-    if (height != 3 && towers[height + 1][column] != 0)
-    {
-        solveHanoi(towers, height + 1, column);
-    }
-
-    // Move on top of NEAREST value if available
+    // Move on top of NEAREST +1 value if available
     for (int c = 0; c < 3; c++)
     {
         // Don't search the current value's column
@@ -112,6 +110,24 @@ int solveHanoi(int towers[4][3], int height, int column)
             {
                 towers[h + 1][c] = cur;
                 towers[height][column] = 0;
+
+                // Find and solve next value as each is solved
+                if (cur < 4 && towers[4 - cur][2] == cur)
+                {
+                    // Find next value and call function on it
+                    for (int c = 0; c < 3; c++)
+                    {
+                        for (int h = 0; h < 4; h++)
+                        {
+                            if (towers[h][c] == cur - 1)
+                            {
+                                solveHanoi(towers, h, c);
+                                return 0;
+                            }
+                        }
+                    }
+                }
+
                 return 0;
             }
         }   
@@ -122,7 +138,7 @@ int solveHanoi(int towers[4][3], int height, int column)
     {
         for (int h = 0; h < 4; h++)
         {
-            if (towers[h][c] > towers[height][column] && towers[h + 1][c] == 0)
+            if (towers[h][c] > cur + 2 && towers[h + 1][c] == 0)
             {
                 towers[h + 1][c] = cur;
                 towers[height][column] = 0;
@@ -139,14 +155,28 @@ int solveHanoi(int towers[4][3], int height, int column)
         {
             continue;
         }
-
         // If a column is open, move the value to the open column
         else if (towers[0][c] == 0)
             {
                 towers[height][column] = 0;
                 towers[0][c] = cur;
-                // Display towers after each iteration to show steps.
-                printTowers(towers);
+
+                if (cur == 4)
+                {
+                    // When 4 is solved, find and solve 3
+                    for (int c = 0; c < 3; c++)
+                    {
+                        for (int h = 0; h < 4; h++)
+                        {
+                            if (towers[h][c] == 3)
+                            {
+                                solveHanoi(towers, h, c);
+                                return 0;
+                            }
+                        }
+                    }
+                }
+
                 return 0;
             }
     }
