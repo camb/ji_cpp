@@ -65,7 +65,7 @@ int solveHanoi(int towers[4][3], int height, int column)
 {
     // cout << "HEIGHT: " << height << " COLUMN: " << column << endl;
 
-    // Display towers after each iteration to show steps.
+    // Display towers each call to show steps.
     printTowers(towers);
 
     // Easier variable to work with for the current location value
@@ -77,20 +77,8 @@ int solveHanoi(int towers[4][3], int height, int column)
         solveHanoi(towers, height + 1, column);
     }
 
-    // Base cases to exit recursive function if values are in correct location
-    if ( cur == 4 && towers[0][2] == 4)
-    {
-        return 0;
-    }
-    else if ( cur == 3 && towers[1][2] == 3)
-    {
-        return 0;
-    }
-    else if ( cur == 2 && towers[2][2] == 2)
-    {
-        return 0;
-    }
-    else if ( cur == 1 && towers[3][2] == 1)
+    // Base cases to exit recursive function if value is already in correct location
+    if (towers[4 - cur][2] == cur)
     {
         return 0;
     }
@@ -111,8 +99,8 @@ int solveHanoi(int towers[4][3], int height, int column)
                 towers[h + 1][c] = cur;
                 towers[height][column] = 0;
 
-                // Find and solve next value as each is solved
-                if (cur < 4 && towers[4 - cur][2] == cur)
+                // If solved, find and solve next value and solve
+                if (towers[4 - cur][2] == cur)
                 {
                     // Find next value and call function on it
                     for (int c = 0; c < 3; c++)
@@ -161,6 +149,7 @@ int solveHanoi(int towers[4][3], int height, int column)
                 towers[height][column] = 0;
                 towers[0][c] = cur;
 
+                // If we have moved 4 to a blank column we can assume it's solved
                 if (cur == 4)
                 {
                     // When 4 is solved, find and solve 3
