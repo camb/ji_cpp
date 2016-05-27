@@ -1,9 +1,6 @@
 // Chapter 17 Practice Problem 3
 // Write a program that checks whether a binary tree is properly balanced.
 
-// Chapter 17 Practice Problem 2
-// Write a program that counts the number of nodes in a binary tree
-
 #include <iostream>
 
 using namespace std;
