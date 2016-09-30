@@ -8,17 +8,19 @@ using namespace std;
 
 class Comparable {
 public:
-    int score;
+    int value;
     // = 0 makes this a pure virtual function
     virtual int compare (Comparable& other) = 0;
+    virtual int getCompareValue ();
 private:
 };
 
 class HighScoreElement : public Comparable {
 public:
     string name;
+    int score;
     virtual int compare (Comparable& other);
-    void sort();
+    virtual int getCompareValue ();
 private:
 };
 
@@ -45,14 +47,14 @@ int main () {
 
     for (int i = 0; i < 3; i++)
     {
-        cout << foo[i]->score << endl;
+        cout << foo[i]->getCompareValue() << endl;
     }
 
     sortComparables(foo, 3);
 
     for (int i = 0; i < 3; i++)
     {
-        cout << foo[i]->score << endl;
+        cout << foo[i]->getCompareValue() << endl;
     }
 
 }
@@ -79,17 +81,26 @@ void sortComparables(Comparable* bar[], int size) {
     }
 }
 
+
+int Comparable::getCompareValue() {
+    return value;
+}
+
+int HighScoreElement::getCompareValue() {
+    return score;
+}
+
 int HighScoreElement::compare(Comparable& other) {
     //returns 0 if the objects are the same, 1 if the object is greater than other, and -1 if the object is less than other
-    if (score < other.score)
+    if (getCompareValue() < other.getCompareValue())
     {
         return -1;
     }
-    else if (score == other.score)
+    else if (getCompareValue() == other.getCompareValue())
     {
         return 0;
     }
-    else if (score > other.score)
+    else if (getCompareValue() > other.getCompareValue())
     {
         return 1;
     }
