@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include <ctime>
+#include <algorithm>
 
 using namespace std;
 
@@ -37,33 +38,61 @@ private:
 };
 
 int main () {
+    StringConvertable* foo[8];
+    StringConvertable *p_test1 = new StringConvertable;
+    StringConvertable *p_test2 = new FirstType;
+    StringConvertable *p_test3 = new SecondType;
+    StringConvertable *p_test4 = new ThirdType;
+    StringConvertable *p_test5 = new SecondType;
+    StringConvertable *p_test6 = new StringConvertable;
+    StringConvertable *p_test7 = new FirstType;
+    StringConvertable *p_test8 = new SecondType;
 
+    foo[0] = p_test1;
+    foo[1] = p_test2;
+    foo[2] = p_test3;
+    foo[3] = p_test4;
+    foo[4] = p_test5;
+    foo[5] = p_test6;
+    foo[6] = p_test7;
+    foo[7] = p_test8;
+
+    for (int i = 0; i < 8; i++)
+    {
+        cout << foo[i]->toString() << endl;
+    }
 }
 
-string StringConvertable::objectType = "Super Class object type";
-string FirstType::objectType = "First object type";
-string SecondType::objectType = "Second object type";
-string ThirdType::objectType = "Third object type";
+string StringConvertable::objectType = "Super Class type";
+string FirstType::objectType = "First type";
+string SecondType::objectType = "Second type";
+string ThirdType::objectType = "Third type";
 
 string StringConvertable::toString () {
     time_t result = time(NULL);
-    cout << asctime(localtime(&result)) << " - " << objectType << endl;
+    string str_time;
+    str_time = string(asctime(localtime(&result)));
+    str_time.erase(remove(str_time.begin(), str_time.end(), '\n'), str_time.end());
+    return ( str_time + " - " + objectType);
 }
 
 string FirstType::toString () {
     time_t result = time(NULL);
-    cout << asctime(localtime(&result)) << " - " << objectType << endl;
-
-}
+    string str_time;
+    str_time = string(asctime(localtime(&result)));
+    str_time.erase(remove(str_time.begin(), str_time.end(), '\n'), str_time.end());
+    return ( str_time + " - " + objectType);}
 
 string SecondType::toString () {
     time_t result = time(NULL);
-    cout << asctime(localtime(&result)) << " - " << objectType << endl;
-
-}
+    string str_time;
+    str_time = string(asctime(localtime(&result)));
+    str_time.erase(remove(str_time.begin(), str_time.end(), '\n'), str_time.end());
+    return ( str_time + " - " + objectType);}
 
 string ThirdType::toString () {
     time_t result = time(NULL);
-    cout << asctime(localtime(&result)) << " - " << objectType << endl;
-
-}
+    string str_time;
+    str_time = string(asctime(localtime(&result)));
+    str_time.erase(remove(str_time.begin(), str_time.end(), '\n'), str_time.end());
+    return ( str_time + " - " + objectType);}
