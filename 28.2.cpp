@@ -1,2 +1,6 @@
 // Chapter 28 Practice Problem 2
 // Modify the HTML parser you implemented in Chapter 19 about Strings so that it can read data from a file on disk.
+
+// Chapter 19 Practice Problem 2
+// Write a program that reads in HTML text that the user types in (don't worry, we'll cover how to read from a file later). It should support the following HTML tags: <html>, <head>, <body>, <b>, <i>, and <a>. Each HTML tag has an open tag, e.g. <html>, and a closing tag that has a forward-slash at the start: </html>. Inside the tag is text that is controlled by that tag: <b>text to be bolded</b> or <i>text to be italicized</i>. The <head> </head> tags control text that is metadata, and the <body></body> tags surround text that is to be displayed. <a> targs are used for hyperlinks, and have an URL in the following format: <a href=URL>text</a>.
+// Once your program has read in some HTML, it should simply ignore <html>. It should remove any text from the <head> section so that it doesn't show up when you output it. It should then display all text in the body, modifying it so that any text between a <b> and a </b> will show up with asterisks(*) around it, amy text inside <i> and </i> will show up with underscores (_) around it, and any text with a <a href=linkurl>link text</a> tag shows up as link text (linkurl).
