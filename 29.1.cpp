@@ -10,7 +10,6 @@ template <typename T>
 T sumVector( vector<T> &v );
 
 int main() {
-    cout << "bleh\n";
     vector<int> v_int(3);
     vector<bool> v_bool(4);
     vector<float> v_flt(3);
@@ -33,6 +32,7 @@ int main() {
     v_dbl[1] = 9997123;
     v_dbl[2] = 32421233;
 
+    cout << "Sum vectors:\n";
     cout << sumVector( v_int ) << endl;
     cout << sumVector( v_bool ) << endl;
     cout << sumVector( v_flt ) << endl;
