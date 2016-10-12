@@ -16,19 +16,20 @@ a negative initial size? What about accessing a negative index?*/
 
 
 #include <iostream>
+#include <string>
 
 using namespace std;
 
 template <typename T>
 struct typeNode {
         typeNode *_p_next;
-        int value;
+        T value;
     };
 
 template <typename T>
 class vectorOfType {
 public:
-    template <typename T> T getVal(int index);
+    T getVal(int index);
     void setVal(int index, T value);
     void pushback(T value);
     void pushfront(T value);
@@ -39,14 +40,14 @@ public:
     vectorOfType (const vectorOfType& other); // Copy constructor
     ~vectorOfType (); // Destructor
 private:
-    typeNode *_p_head;
+    typeNode<T> *_p_head;
 };
 
 int main () {
-    // vectorOfType fivetest(3);
+    // vectorOfType<int> fivetest(3);
     // fivetest.print();
 
-    vectorOfType test(0);
+    vectorOfType<int> test(0);
     test.setVal(0, 4);
     test.pushfront(3);
     test.pushfront(2);
@@ -54,31 +55,47 @@ int main () {
     test.pushfront(1);
     test.print();
 
-    vectorOfType testCopy(test);
+    vectorOfType<int> testCopy(test);
     testCopy.print();
 
-    vectorOfType testCopy2 = testCopy;
+    vectorOfType<int> testCopy2 = testCopy;
     testCopy2.setVal(2, 9);  
     testCopy2.pushback(14);    
     testCopy2.print();
 
-    // cout << "Get index 4: " << test.getVal(4) << endl;
-    // cout << "Get index 2: " << test.getVal(2) << endl;
-    // cout << "Get index 0: " << test.getVal(0) << endl;
-    // test.setVal(0, 10);
-    // test.setVal(2, 100);
-    // test.setVal(4, 1000);
-    // test.print();
+    cout << "Get index 4: " << test.getVal(4) << endl;
+    cout << "Get index 2: " << test.getVal(2) << endl;
+    cout << "Get index 0: " << test.getVal(0) << endl;
+    test.setVal(0, 10);
+    test.setVal(2, 100);
+    test.setVal(4, 1000);
+    test.print();
 
-    // vectorOfType noargtest;
+    // vectorOfType<int> noargtest;
     // noargtest.print();
+
+    // testing templating now with string type
+    vectorOfType<string> str_test(0);
+    str_test.print();
+    str_test.setVal(0, "first");
+    str_test.pushfront("aye");
+    str_test.pushback("back");
+    str_test.pushfront("bby");
+
+    vectorOfType<string> str_test2 = str_test;
+    str_test2.print();
+
+    vectorOfType<string> str_test3(str_test2);
+    str_test3.print();
+
+    cout << "Get index 2: " << str_test3.getVal(2) << endl;
 
     return 0;
 }
 
 
-template <typename T> T vectorOfType::getVal(int index) {
-    typeNode *p_temp = new typeNode;
+template <typename T> T vectorOfType<T>::getVal(int index) {
+    typeNode<T> *p_temp = new typeNode<T>;
     p_temp = _p_head;
     for (int i = 0; i < index; i++)
     {
@@ -90,8 +107,8 @@ template <typename T> T vectorOfType::getVal(int index) {
     delete p_temp;
 }
 
-template <typename T> void vectorOfType::setVal(int index, T value) {
-    typeNode *p_temp = new typeNode;
+template <typename T> void vectorOfType<T>::setVal(int index, T value) {
+    typeNode<T> *p_temp = new typeNode<T>;
     p_temp = _p_head;
     for (int i = 0; i < index; i++)
     {
@@ -102,9 +119,9 @@ template <typename T> void vectorOfType::setVal(int index, T value) {
     delete p_temp;
 }
 
-template <typename T> void vectorOfType::pushback(T value) {
-    typeNode *p_temp = new typeNode;
-    typeNode *pushback = new typeNode;
+template <typename T> void vectorOfType<T>::pushback(T value) {
+    typeNode<T> *p_temp = new typeNode<T>;
+    typeNode<T> *pushback = new typeNode<T>;
     pushback->_p_next = NULL;
     pushback->value = value;
     p_temp = _p_head;
@@ -127,9 +144,9 @@ template <typename T> void vectorOfType::pushback(T value) {
     delete pushback;
 }
 
-template <typename T> void vectorOfType::pushfront(T value) {
-    typeNode *p_temp = new typeNode;
-    typeNode *pushfront = new typeNode;
+template <typename T> void vectorOfType<T>::pushfront(T value) {
+    typeNode<T> *p_temp = new typeNode<T>;
+    typeNode<T> *pushfront = new typeNode<T>;
     pushfront->value = value;
     p_temp = _p_head;
     if (p_temp == NULL)
@@ -149,9 +166,9 @@ template <typename T> void vectorOfType::pushfront(T value) {
     delete pushfront;
 }
 
-template <typename T> void vectorOfType::print () {
+template <typename T> void vectorOfType<T>::print () {
     cout << "Printing values:\n";
-    typeNode *p_temp = new typeNode;
+    typeNode<T> *p_temp = new typeNode<T>;
     p_temp = _p_head;
 
     while (p_temp != NULL)
@@ -163,20 +180,17 @@ template <typename T> void vectorOfType::print () {
     delete p_temp;
 }
 
-template <typename T> vectorOfType::vectorOfType () {
-    typeNode *p_temp = new typeNode;
-    p_temp->value = 0;
+template <typename T> vectorOfType<T>::vectorOfType () {
+    typeNode<T> *p_temp = new typeNode<T>;
     p_temp->_p_next = NULL;
     _p_head = p_temp;
     for(int i = 1; i < 32; i++)
     {
-        typeNode *p_next = new typeNode;
+        typeNode<T> *p_next = new typeNode<T>;
 
-        p_next->value = 0;
         p_next->_p_next = NULL;
         p_temp->_p_next = p_next;
         p_temp = p_temp->_p_next;
-        p_temp->value = 0;
         p_temp->_p_next = NULL;
 
         p_next = NULL;
@@ -187,20 +201,17 @@ template <typename T> vectorOfType::vectorOfType () {
     delete p_temp;
 }
 
-template <typename T> vectorOfType::vectorOfType (int size) {
-    typeNode *p_temp = new typeNode;
-    p_temp->value = 0;
+template <typename T> vectorOfType<T>::vectorOfType (int size) {
+    typeNode<T> *p_temp = new typeNode<T>;
     p_temp->_p_next = NULL;
     _p_head = p_temp;
     for(int i = 1; i < size; i++)
     {
-        typeNode *p_next = new typeNode;
+        typeNode<T> *p_next = new typeNode<T>;
 
-        p_next->value = 0;
         p_next->_p_next = NULL;
         p_temp->_p_next = p_next;
         p_temp = p_temp->_p_next;
-        p_temp->value = 0;
         p_temp->_p_next = NULL;
 
         p_next = NULL;
@@ -211,9 +222,9 @@ template <typename T> vectorOfType::vectorOfType (int size) {
     delete p_temp;
 }
 
-template <typename T> vectorOfType& vectorOfType::operator=  (const vectorOfType& other) {
-    typeNode *p_temp = new typeNode;
-    typeNode *p_other = new typeNode;
+template <typename T> vectorOfType<T>& vectorOfType<T>::operator=  (const vectorOfType& other) {
+    typeNode<T> *p_temp = new typeNode<T>;
+    typeNode<T> *p_other = new typeNode<T>;
     p_other = other._p_head;
     if (p_other != NULL)
     {
@@ -224,7 +235,7 @@ template <typename T> vectorOfType& vectorOfType::operator=  (const vectorOfType
         {
             p_other = p_other->_p_next;
 
-            typeNode *p_next = new typeNode;
+            typeNode<T> *p_next = new typeNode<T>;
             p_next->value = p_other->value;
             p_next->_p_next = NULL;
 
@@ -242,9 +253,9 @@ template <typename T> vectorOfType& vectorOfType::operator=  (const vectorOfType
     delete p_temp;
 }
 
-template <typename T> vectorOfType::vectorOfType (const vectorOfType& other) {
-    typeNode *p_temp = new typeNode;
-    typeNode *p_other = new typeNode;
+template <typename T> vectorOfType<T>::vectorOfType (const vectorOfType& other) {
+    typeNode<T> *p_temp = new typeNode<T>;
+    typeNode<T> *p_other = new typeNode<T>;
     p_other = other._p_head;
     if (p_other != NULL)
     {
@@ -255,7 +266,7 @@ template <typename T> vectorOfType::vectorOfType (const vectorOfType& other) {
         {
             p_other = p_other->_p_next;
 
-            typeNode *p_next = new typeNode;
+            typeNode<T> *p_next = new typeNode<T>;
             p_next->value = p_other->value;
             p_next->_p_next = NULL;
 
@@ -273,9 +284,9 @@ template <typename T> vectorOfType::vectorOfType (const vectorOfType& other) {
     delete p_temp;
 }
 
-template <typename T> vectorOfType::~vectorOfType () {
-    typeNode *p_temp = new typeNode;
-    typeNode *p_next = new typeNode;
+template <typename T> vectorOfType<T>::~vectorOfType () {
+    typeNode<T> *p_temp = new typeNode<T>;
+    typeNode<T> *p_next = new typeNode<T>;
     if (_p_head != NULL)
     {
         p_temp = _p_head;
